@@ -1,0 +1,30 @@
+# One command for the whole stack: docker compose up --build
+# Then open http://localhost:3000 and sign in as demo / demo1234 (account 123456789012).
+services:
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: sqlite:////data/route53.db
+      # Browsers accept Secure cookies on http://localhost, so this can stay true
+      SESSION_COOKIE_SECURE: "true"
+    volumes:
+      - route53-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  route53-data:
