@@ -1,8 +1,11 @@
 """FastAPI app factory: routers, CORS and the single error format."""
 
+from typing import Any
+
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -76,6 +79,29 @@ def register_error_handlers(app: FastAPI) -> None:
         return _error(exc.status_code, ErrorBody(code=code, message=str(exc.detail)))
 
 
+def _document_errors_as_400(app: FastAPI) -> None:
+    """Validation errors are returned as 400 InvalidInput, so drop FastAPI's 422 from the docs."""
+
+    def openapi() -> dict[str, Any]:
+        if app.openapi_schema:
+            return app.openapi_schema
+        schema = get_openapi(
+            title=app.title,
+            version=app.version,
+            description=app.description,
+            routes=app.routes,
+        )
+        for operations in schema.get("paths", {}).values():
+            for operation in operations.values():
+                operation.get("responses", {}).pop("422", None)
+        for name in ("HTTPValidationError", "ValidationError"):
+            schema.get("components", {}).get("schemas", {}).pop(name, None)
+        app.openapi_schema = schema
+        return schema
+
+    app.openapi = openapi  # type: ignore[method-assign]
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
     app = FastAPI(
@@ -104,6 +130,8 @@ def create_app() -> FastAPI:
         import_export.router,
     ):
         app.include_router(router, prefix="/api/v1")
+
+    _document_errors_as_400(app)
 
     @app.get("/api/health", tags=["health"])
     def health() -> dict[str, str]:

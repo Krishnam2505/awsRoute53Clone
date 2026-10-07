@@ -323,11 +323,6 @@ export interface components {
       /** Message */
       message: string;
     };
-    /** HTTPValidationError */
-    HTTPValidationError: {
-      /** Detail */
-      detail?: components['schemas']['ValidationError'][];
-    };
     /** HostedZoneCreate */
     HostedZoneCreate: {
       /** Name */
@@ -684,19 +679,6 @@ export interface components {
       /** Vpc Id */
       vpc_id: string;
     };
-    /** ValidationError */
-    ValidationError: {
-      /** Location */
-      loc: (string | number)[];
-      /** Message */
-      msg: string;
-      /** Error Type */
-      type: string;
-      /** Input */
-      input?: unknown;
-      /** Context */
-      ctx?: Record<string, never>;
-    };
   };
   responses: never;
   parameters: never;
@@ -762,15 +744,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -949,15 +922,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   create_hosted_zone_api_v1_hostedzones_post: {
@@ -1018,15 +982,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   get_hosted_zone_api_v1_hostedzones__zone_id__get: {
@@ -1085,15 +1040,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   delete_hosted_zone_api_v1_hostedzones__zone_id__delete: {
@@ -1148,15 +1094,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -1219,15 +1156,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -1311,15 +1239,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   create_record_set_api_v1_hostedzones__zone_id__records_post: {
@@ -1382,15 +1301,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   get_record_set_api_v1_hostedzones__zone_id__records__record_id__get: {
@@ -1448,15 +1358,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -1522,15 +1423,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   delete_record_set_api_v1_hostedzones__zone_id__records__record_id__delete: {
@@ -1586,15 +1478,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -1659,15 +1542,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   get_change_api_v1_changes__change_id__get: {
@@ -1724,15 +1598,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
@@ -1800,15 +1665,6 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse'];
         };
       };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
-        };
-      };
     };
   };
   export_zone_api_v1_hostedzones__zone_id__export_get: {
@@ -1868,15 +1724,6 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['ErrorResponse'];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['HTTPValidationError'];
         };
       };
     };
