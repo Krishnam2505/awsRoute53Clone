@@ -13,5 +13,4 @@ COPY . .
 RUN mkdir -p /data
 
 # Migrate, seed only if the database is empty, then serve
-CMD alembic upgrade head && python -m app.seed && \
-    uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'
+CMD ["sh", "-c", "alembic upgrade head && python -m app.seed && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT} --proxy-headers --forwarded-allow-ips='*'"]
