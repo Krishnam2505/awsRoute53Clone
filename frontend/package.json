@@ -1,0 +1,39 @@
+{
+  "name": "route53-clone-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "gen:api": "openapi-typescript ${API_SCHEMA_URL:-http://localhost:8000/openapi.json} -o src/lib/api-types.ts && prettier --write src/lib/api-types.ts",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "@cloudscape-design/collection-hooks": "^1.0.110",
+    "@cloudscape-design/component-toolkit": "^1.0.0-beta.189",
+    "@cloudscape-design/components": "^3.0.1393",
+    "@cloudscape-design/global-styles": "^1.0.71",
+    "@tanstack/react-query": "^5.104.1",
+    "next": "^15.5.27",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.27",
+    "eslint-config-prettier": "^10.1.8",
+    "openapi-typescript": "^7.13.0",
+    "prettier": "^3.9.9",
+    "typescript": "^5.9.3"
+  }
+}
