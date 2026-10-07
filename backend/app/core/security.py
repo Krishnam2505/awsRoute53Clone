@@ -7,17 +7,26 @@ cannot be replayed as a cookie.
 import hashlib
 import secrets
 
-from passlib.context import CryptContext
+import bcrypt
 
-_pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# bcrypt only reads the first 72 bytes of a password; newer versions raise instead of
+# truncating, so truncate explicitly
+_MAX_BCRYPT_BYTES = 72
+
+
+def _encode(password: str) -> bytes:
+    return password.encode()[:_MAX_BCRYPT_BYTES]
 
 
 def hash_password(password: str) -> str:
-    return _pwd_context.hash(password)
+    return bcrypt.hashpw(_encode(password), bcrypt.gensalt()).decode()
 
 
 def verify_password(password: str, password_hash: str) -> bool:
-    return _pwd_context.verify(password, password_hash)
+    try:
+        return bcrypt.checkpw(_encode(password), password_hash.encode())
+    except ValueError:
+        return False  # malformed hash
 
 
 def new_session_token() -> str:

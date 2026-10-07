@@ -41,7 +41,7 @@ A look-alike of the AWS Route 53 console: a mocked sign-in, then full create, re
 | --- | --- |
 | Frontend | Next.js 15 (App Router) · TypeScript (strict, no `any`) · Cloudscape Design System · TanStack Query |
 | API types | Generated from FastAPI's OpenAPI schema with `openapi-typescript` |
-| Backend | FastAPI · Pydantic v2 · SQLAlchemy 2.0 (typed `Mapped[]` models) · Alembic · dnspython · passlib/bcrypt |
+| Backend | FastAPI · Pydantic v2 · SQLAlchemy 2.0 (typed `Mapped[]` models) · Alembic · dnspython · bcrypt |
 | Database | SQLite, with foreign keys switched on for every connection |
 | Quality | Ruff (lint and format) · pytest (41 tests) · ESLint · Prettier · `tsc --noEmit` · Playwright smoke test · GitHub Actions CI |
 
@@ -232,33 +232,46 @@ All routes are under `/api/v1` and need the session cookie, except login and hea
 
 ## Setup instructions
 
-**Prerequisites:** Python 3.12 or later (3.13 tested) and Node.js 20 or later (22 tested).
+**Prerequisites:** Python 3.12 or newer (3.13 and 3.14 tested), Node.js 20 or newer (22 tested) and Git. On macOS, use `python3` for the first command below; once the virtual environment is active, `python` works.
 
-### Backend
+### Backend (terminal 1)
 
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env               # optional; the defaults work locally
-alembic upgrade head               # create the SQLite schema
-python -m app.seed                 # demo users and zones (skipped if the DB has data)
-uvicorn app.main:app --reload      # http://localhost:8000, docs at /docs
+python3 -m venv .venv
+source .venv/bin/activate              # Windows: .venv\Scripts\activate
+python -m pip install -r requirements.txt
+cp .env.example .env                   # optional; the defaults work locally (Windows: copy)
+python -m alembic upgrade head         # creates route53.db (prints nothing on success)
+python -m app.seed                     # demo users and zones (skipped if the DB has data)
+python -m uvicorn app.main:app --reload
 ```
 
-### Frontend
+Check http://localhost:8000/api/health returns `{"status":"ok"}`. API docs are at http://localhost:8000/docs.
+
+> Run the tools as `python -m …` with the environment active. That guarantees they use the project's own Python. A plain `uvicorn` or `pip` can resolve to another Python install on your machine and fail with `ModuleNotFoundError`.
+
+### Frontend (terminal 2)
 
 ```bash
 cd frontend
 npm install
-cp .env.local.example .env.local   # BACKEND_URL=http://localhost:8000
-npm run dev                        # http://localhost:3000
+cp .env.local.example .env.local       # BACKEND_URL=http://localhost:8000 (Windows: copy)
+npm run dev
 ```
 
-Open http://localhost:3000 and choose **Use demo account**.
+Open **http://localhost:3000** and choose **Use demo account**. The first page load takes a few seconds while Next.js compiles it.
 
-> The session cookie is `Secure`. Browsers accept Secure cookies on `http://localhost`, so local development works as is. If you serve the app over plain HTTP on any other host, set `SESSION_COOKIE_SECURE=false` in `backend/.env`.
+> The session cookie is `Secure`. Browsers accept Secure cookies on `http://localhost`, so use `localhost`, not `127.0.0.1`. To serve the app over plain HTTP on any other host, set `SESSION_COOKIE_SECURE=false` in `backend/.env`.
+
+### Troubleshooting
+
+| Symptom | Fix |
+| --- | --- |
+| `ModuleNotFoundError` when starting the backend | Activate the environment (`source .venv/bin/activate`) and start it with `python -m uvicorn …` |
+| `ERR_EMPTY_RESPONSE` on port 8000 | An old server is stuck. Run `lsof -ti:8000 \| xargs kill -9` (macOS/Linux) and start again |
+| Sign-in succeeds but you land back on the login page | Open the app at `http://localhost:3000`, not `127.0.0.1` |
+| You want fresh demo data | Stop the backend, delete `backend/route53.db`, then rerun `python -m alembic upgrade head` and `python -m app.seed` |
 
 ### Everything with Docker
 
@@ -272,8 +285,8 @@ The SQLite file lives in the `route53-data` volume and is seeded on first start.
 
 | Where | Command | What it does |
 | --- | --- | --- |
-| backend | `ruff check . && ruff format --check .` | Lint and format check |
-| backend | `pytest` | Run the test suite |
+| backend | `python -m ruff check . && python -m ruff format --check .` | Lint and format check |
+| backend | `python -m pytest` | Run the test suite |
 | frontend | `npm run typecheck` | `tsc --noEmit` |
 | frontend | `npm run lint` / `npm run format:check` | ESLint / Prettier |
 | frontend | `npm run gen:api` | Regenerate `src/lib/api-types.ts` from a running backend's `/openapi.json` |
@@ -282,7 +295,7 @@ The SQLite file lives in the `route53-data` volume and is seeded on first start.
 ## Tests
 
 ```bash
-cd backend && pytest               # 41 tests, about 20 seconds
+cd backend && python -m pytest     # 41 tests, about 20 seconds
 cd frontend && npm run e2e         # needs the frontend and backend running
 ```
 
