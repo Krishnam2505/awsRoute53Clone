@@ -4,7 +4,7 @@ A look-alike of the AWS Route 53 console: a mocked sign-in, then full create, re
 
 | | |
 | --- | --- |
-| **Live demo** | _Add your hosted link here after deploying (see [Deployment](#deployment))_ |
+| **Live demo** | **https://aws-route53-clone-ivory-eight.vercel.app** (frontend on Vercel, API on Railway) |
 | **Demo sign-in** | IAM user · Account ID `123456789012` · user `demo` · password `demo1234` (or click **Use demo account**) |
 | **Second account** | `alice` / `alice1234`, account `210987654321`, to show zones are isolated per user |
 | **API docs** | `<backend-url>/docs` (FastAPI's interactive Swagger UI) |
