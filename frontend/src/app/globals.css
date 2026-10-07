@@ -1,0 +1,71 @@
+/* Only what Cloudscape doesn't cover: the sticky console header and a few small helpers. */
+body {
+  margin: 0;
+}
+
+.console-header {
+  position: sticky;
+  top: 0;
+  z-index: 1002;
+}
+
+.console-search {
+  width: 100%;
+  max-width: 480px;
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 6px;
+  border: 1px solid #8c8c94;
+  border-radius: 4px;
+  font-family: monospace;
+  text-align: center;
+}
+
+.value-lines {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.record-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.record-name-row > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.record-name-suffix {
+  flex: 0 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
